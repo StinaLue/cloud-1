@@ -1,0 +1,1 @@
+our_server ansible_host=192.168.1.87 ansible_user=toni
