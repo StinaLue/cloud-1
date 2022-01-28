@@ -1,0 +1,29 @@
+---
+- name: Verify that Docker is not already installed
+  package:
+    name:
+    - docker
+    - docker-engine
+    - docker.io
+    state: absent
+
+- name: Make sure Docker installation dependencies are installed
+  apt:
+    name:
+    - ca-certificates
+    - curl
+    - gnupg
+    - lsb-release
+    state: present
+
+- name: Add Docker official GPG key to apt keyring
+  apt_key:
+    url: "{{ docker_gpg_key_URL }}"
+
+- name: Add Docker official apt repository to apt sources
+  apt_repository:
+    repo: "{{ docker_apt_repo }}"
+
+- name: Install Docker through apt
+  apt:
+    name: docker-ce
