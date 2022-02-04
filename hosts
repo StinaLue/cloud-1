@@ -1,2 +1,2 @@
-#our_server ansible_host=192.168.1.87 ansible_user=toni
+our_server ansible_host=192.168.1.87 ansible_user=root
 stins ansible_host=192.168.56.101 ansible_user=stins

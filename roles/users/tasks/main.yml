@@ -7,7 +7,7 @@
   user:
     name: stins
     shell: /bin/bash
-    uid: 1000
+    uid: 1001
     group: users
     groups: sudo
     append: true # --> user is not removed from any other group
