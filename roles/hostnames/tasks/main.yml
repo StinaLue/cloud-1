@@ -1,0 +1,13 @@
+---
+- name: Set hostname
+  hostname:
+    #name: "{{ inventory_hostname }}"
+    name: stins
+
+- name: Copy "hosts" file from server
+  copy:
+    src: hosts
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644

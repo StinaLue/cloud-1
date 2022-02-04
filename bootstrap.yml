@@ -3,3 +3,5 @@
   roles:
   - apt-upgrade
   - docker-install
+  - hostnames
+  - users

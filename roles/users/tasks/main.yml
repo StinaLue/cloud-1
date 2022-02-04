@@ -1,0 +1,69 @@
+---
+- name: Install sudo
+  apt: 
+    name: sudo
+
+- name: Create stins user with passwort thanks to "mkpasswd -m sha-512"
+  user:
+    name: stins
+    shell: /bin/bash
+    uid: 1000
+    group: users
+    groups: sudo
+    append: true # --> user is not removed from any other group
+    password: $6$cc9Vs3y3DlIf0Mof$tQyg5Tv79YQLWpLEEpeY0NaK6pCz8E4Dy9U6go4Sh6O4SAi5vcOJNPBU.9sMTNbcIf7qidMg9iskTzUG3E/Jo1
+
+- name: Create a "sudo-nopasswd" group
+  group:
+    name: sudo-nopasswd
+
+- name: Add user stins to sudo-nopasswd group
+  user:
+    name: stins
+    groups: sudo-nopasswd
+    append: true
+  when: passwordless_sudo is defined and passwordless_sudo == true # With when we specify that the group assignment should only take place if the variable passwordless_sudo exists and is set to true -> activasion for password in sudo easy when setting to false
+
+- name: Remove stins from sudo-nopasswd group when condition above is set to false
+  shell: /usr/sbin/delgroup stins sudo-nopasswd
+  when: not (passwordless_sudo is defined and passwordless_sudo == true)
+  ignore_errors: yes
+
+- name: Add sudo-nopasswd to sudoers file
+  lineinfile: #to change single line in file 
+    dest: /etc/sudoers #file to be modified
+    line: '%sudo-nopasswd ALL=(ALL:ALL) NOPASSWD:ALL' #line to put in file
+    regexp: '^%sudo-nopasswd' #If there is another line that matches the regular expression passed with regexp (i.e. one that starts with %sudo-nopasswd), it will be deleted.
+
+- name: Create root's .ssh directory
+  file:
+    path: /root/.ssh
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+
+- name: Copy root's authorized keys
+  copy:
+    src: authorized_keys_root
+    dest: /root/.ssh/authorized_keys
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Create stins's .ssh directory
+  file:
+    path: /stins/.ssh
+    state: directory
+    owner: stins
+    group: stins
+    mode: 0700
+
+- name: Copy stins's authorized keys
+  copy:
+    src: authorized_keys_stins
+    dest: /stins/.ssh/authorized_keys
+    owner: stins
+    group: stins
+    mode: 0600
+
