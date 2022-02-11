@@ -22,12 +22,12 @@
     name: stins
     groups: sudo-nopasswd
     append: true
-  when: passwordless_sudo is defined and passwordless_sudo == true # With when we specify that the group assignment should only take place if the variable passwordless_sudo exists and is set to true -> activasion for password in sudo easy when setting to false
+  #when: passwordless_sudo is defined and passwordless_sudo == true # With when we specify that the group assignment should only take place if the variable passwordless_sudo exists and is set to true -> activasion for password in sudo easy when setting to false
 
-- name: Remove stins from sudo-nopasswd group when condition above is set to false
-  shell: /usr/sbin/delgroup stins sudo-nopasswd
-  when: not (passwordless_sudo is defined and passwordless_sudo == true)
-  ignore_errors: yes
+#- name: Remove stins from sudo-nopasswd group when condition above is set to false
+#  shell: /usr/sbin/delgroup stins sudo-nopasswd
+#  when: not (passwordless_sudo is defined and passwordless_sudo == true)
+#  ignore_errors: yes
 
 - name: Add sudo-nopasswd to sudoers file
   lineinfile: #to change single line in file 
@@ -56,7 +56,7 @@
     path: /stins/.ssh
     state: directory
     owner: stins
-    group: stins
+    group: users
     mode: 0700
 
 - name: Copy stins's authorized keys
@@ -64,6 +64,6 @@
     src: authorized_keys_stins
     dest: /stins/.ssh/authorized_keys
     owner: stins
-    group: stins
+    group: users
     mode: 0600
 
