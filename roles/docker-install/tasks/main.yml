@@ -27,3 +27,15 @@
 - name: Install Docker through apt
   apt:
     name: docker-ce
+
+
+- name: Install pip3 to be able to install docker python dependency/package
+  apt:
+    name: 'python3-pip'
+    state: latest
+    update-cache: yes
+
+
+- name: Install docker python dependency/package 
+  pip:
+    name: docker
