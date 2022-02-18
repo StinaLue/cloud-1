@@ -5,17 +5,16 @@ PRE-REQUISITES
 4. SSH-Keys configured for remote administration
 
 GOAL
-- Install a WordPress site on a remote server
+- Automate the installation of a WordPress site on a remote server
 
 CONDITIONS
-- Site should be able to restart when server is rebooted
+- Site should be able to restart when server is rebooted (at Docker level ? (restart policy/live restore), at system level ? (verify Docker daemon gets started at boot))
 - No secrets should be left in clear (make use of Ansible Vault)
-- Data should persist when server rebooted
-- Possibility to deploy site on several servers simultaneously
-- Each process should run in separate container
-- Possibility to only install one service on the server -> Make code modular
-- Secure and limited access to server
-- Install all services needed for Wordpress (MySQL, PHP, ...) with dedicated Dockerfile
+- Data should persist when server rebooted (use of Docker bind mounts or volumes ?)
+- Possibility to deploy site on several servers simultaneously (easy with Ansible inventory)
+- Possibility to only install one service on the server -> Make code modular (use of Ansible tags)
+- Secure and limited access to server (firewall + basic security setup)
+- Install all services needed for Wordpress (MySQL, PHP, ...) with dedicated Dockerfiles
 - Use TLS (Transport Layer Security) for server
 - When URL requested, redirect to correct site
 - Use variables to make configurations easier
@@ -31,5 +30,5 @@ STEPS
 6a) Push Wordpress Dockerfile
 6b) Push PhpMyAdmin Dockerfile
 6c) Push MySQL Dockerfile
-
- ) Create worpress site
+7)
+ ) Create wordpress site
