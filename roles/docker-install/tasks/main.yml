@@ -39,3 +39,7 @@
 - name: Install docker python dependency/package 
   pip:
     name: docker
+
+- name: Install Docker-Compose
+  apt:
+    name: docker-compose
