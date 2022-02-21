@@ -1,0 +1,25 @@
+---
+- name: Create project directory on host
+  file: 
+    path: "{{project_folder}}/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  loop: 
+    - wordpress
+    - mariadb
+    - phpmyadmin
+
+#- name: Create a wordpress and mariadb directory to copy templates into later
+#  file:
+#    path: /opt/docker/wordpress
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: ???
+
+#- name: Run docker-compose up -d
+#  shell: docker-compose up -d
+#  args:
+#    chdir: /opt/docker/wordpress/
