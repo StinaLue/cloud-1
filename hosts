@@ -1,5 +1,5 @@
 #our_server ansible_host=192.168.1.87 ansible_user=root
 #toni1 ansible_host=192.168.1.44 ansible_user=toni
 #toni2 ansible_host=192.168.1.47 ansible_user=toni
-toni3 ansible_host=192.168.1.32 ansible_user=toni
+toni3 ansible_host=192.168.178.92 ansible_user=toni
 #stins ansible_host=192.168.56.101 ansible_user=stins

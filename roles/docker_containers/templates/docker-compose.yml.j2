@@ -3,29 +3,38 @@ version: '3.1'
 services:
 
   wordpress:
-    image: wordpress
+    build: ./wordpress
     restart: always
     ports:
-      - 8080:80
+      - 80:80
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_USER: exampleuser
       WORDPRESS_DB_PASSWORD: examplepass
-      WORDPRESS_DB_NAME: exampledb
+      WORDPRESS_DB_NAME: wordpressdb
     volumes:
-      - wordpress:/var/www/html
+      #- wordpress:/var/www/html
+      - ./html:/var/www/html
 
   db:
-    image: mysql:5.7
+    build: ./mariadb
     restart: always
     environment:
-      MYSQL_DATABASE: exampledb
-      MYSQL_USER: exampleuser
-      MYSQL_PASSWORD: examplepass
-      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+      MARIADB_DATABASE: wordpressdb
+      MARIADB_USER: exampleuser
+      MARIADB_PASSWORD: examplepass
+      MARIADB_ROOT_PASSWORD: '1'
     volumes:
-      - db:/var/lib/mysql
+      #- db:/var/lib/mysql
+      - ./mysql:/var/lib/mysql
+  
+  phpmyadmin:
+    build: ./phpmyadmin
+    restart: always
+    ports:
+      - 4242:80
 
 volumes:
   wordpress:
   db:
+  phpmyadmin:

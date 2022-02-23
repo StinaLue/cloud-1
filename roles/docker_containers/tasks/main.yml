@@ -1,7 +1,7 @@
 ---
-- name: Create project directory on host
+- name: Create project directories on host
   file: 
-    path: "{{project_folder}}/{{ item }}"
+    path: "{{ project_folder }}/{{ item }}"
     state: directory
     owner: root
     group: root
@@ -10,6 +10,22 @@
     - wordpress
     - mariadb
     - phpmyadmin
+
+- name: Copy Dockerfiles and docker-compose file to host
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: wordpress.Dockerfile.j2, dest: "{{ project_folder }}/wordpress/Dockerfile" }
+    - { src: mariadb.Dockerfile.j2, dest: "{{ project_folder }}/mariadb/Dockerfile" }
+    - { src: phpmyadmin.Dockerfile.j2, dest: "{{ project_folder }}/phpmyadmin/Dockerfile" }
+    - { src: docker-compose.yml.j2, dest: "{{project_folder}}/docker-compose.yml" }
+
+- name: Launch Docker services through docker-compose
+  docker_compose:
+    build: yes
+    project_src: "{{ project_folder }}" 
+
 
 #- name: Create a wordpress and mariadb directory to copy templates into later
 #  file:

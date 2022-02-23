@@ -23,12 +23,16 @@ STEPS
 
 1) Install Ansible on control node and Ansible Docker module (community.docker) -> ansible-galaxy install community.docker
 2) Update and upgrade system packages (apt upgade + update)
-3) Setup Firewall
-4) Setup sudo-user
+3) Setup system and security
+  3a) Set timezone to Europe/Paris
+  3b) Setup firewall
+  3c) Disable root SSH auth + only allow key authentification for other user
+4) Setup user
+  4a) Add sudo-user
 5) Install Docker
 6) Push Dockerfiles to server
-6a) Push Wordpress Dockerfile
-6b) Push PhpMyAdmin Dockerfile
-6c) Push MySQL Dockerfile
+  6a) Push Wordpress Dockerfile
+  6b) Push PhpMyAdmin Dockerfile
+  6c) Push MySQL Dockerfile
 7)
  ) Create wordpress site
