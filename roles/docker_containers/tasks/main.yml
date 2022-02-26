@@ -5,7 +5,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0755
+    mode: 0700
   loop: 
     - wordpress
     - mariadb
@@ -13,6 +13,7 @@
 
 - name: Copy Dockerfiles and docker-compose file to host
   template:
+    mode: 0700
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
   with_items:
@@ -21,21 +22,45 @@
     - { src: phpmyadmin.Dockerfile.j2, dest: "{{ project_folder }}/phpmyadmin/Dockerfile" }
     - { src: docker-compose.yml.j2, dest: "{{project_folder}}/docker-compose.yml" }
 
-- name: Launch Docker services through docker-compose
+- name: Copy preconfiguration files for Wordpress
+  copy:
+    mode: 0700
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}" 
+  with_items:
+#    - { src: html, dest: "{{ project_folder }}/wordpress/"}
+    - { src: phpmyadmin, dest: "{{ project_folder }}/phpmyadmin/" }
+    - { src: mysql, dest: "{{ project_folder }}/mariadb/"}
+
+#- name: Launch Docker services through docker-compose
+#  docker_compose:
+#    build: yes
+#    project_src: "{{ project_folder }}" 
+#    tags: fullwp
+
+- name: Launch db service through docker-compose
   docker_compose:
     build: yes
     project_src: "{{ project_folder }}" 
+    services:
+      - db
+  tags: [ 'db' ]
+    #when: "'db' in ansible_run_tags"
 
-
-#- name: Create a wordpress and mariadb directory to copy templates into later
-#  file:
-#    path: /opt/docker/wordpress
-#    state: directory
-#    owner: root
-#    group: root
-#    mode: ???
-
-#- name: Run docker-compose up -d
-#  shell: docker-compose up -d
-#  args:
-#    chdir: /opt/docker/wordpress/
+- name: Launch wordpress service through docker-compose
+  docker_compose:
+    build: yes
+    project_src: "{{ project_folder }}" 
+    services:
+      - wordpress
+  tags: [ 'wordpress' ]
+    #when: "'wordpress' in ansible_run_tags"
+    
+- name: Launch pma service through docker-compose
+  docker_compose:
+    build: yes
+    project_src: "{{ project_folder }}" 
+    services:
+      - phpmyadmin
+  tags: [ 'phpmyadmin' ]
+    #when: "'pma' in ansible_run_tags"

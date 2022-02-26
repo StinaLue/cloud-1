@@ -1,0 +1,33 @@
+---
+- name: Set server timezone
+  timezone:
+    name: "{{ desired_timezone }}"
+
+- name: apt update and upgrade 
+  apt:
+    upgrade: yes
+    update_cache: yes
+
+- name: Install UFW (for uncomplicated fire - wall)
+  apt:
+    name: ufw
+    state: present
+
+- name: Allow SSH traffic 
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Allow HTTP and HTTPS traffic to docker services ports 
+  ufw:
+    rule: allow
+    proto: tcp
+    to_port: 80,443,8080
+
+- name: Add default DENY policy to firewall config
+  ufw:
+    state: enabled
+    policy: deny
+    direction: incoming
+
+#- name: 

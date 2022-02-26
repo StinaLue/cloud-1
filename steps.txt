@@ -2,13 +2,14 @@ PRE-REQUISITES
 1. Server up and running (Ubuntu 20.04)
 2. SSH daemon installed
 3. Python3 installed
-4. SSH-Keys configured for remote administration
+4. SSH-Keys configured for remote administration (root user)
+5. Ansible installed on control node + community.docker and community.general Ansible modules -> ansible-galaxy install community.docker community.general
 
 GOAL
 - Automate the installation of a WordPress site on a remote server
 
 CONDITIONS
-- Site should be able to restart when server is rebooted (at Docker level ? (restart policy/live restore), at system level ? (verify Docker daemon gets started at boot))
+- Site should be able to restart when server is rebooted (at Docker level ? (restart policy/live restore), at system level ? (Docker daemon gets started at boot --> vendor preset))
 - No secrets should be left in clear (make use of Ansible Vault)
 - Data should persist when server rebooted (use of Docker bind mounts or volumes ?)
 - Possibility to deploy site on several servers simultaneously (easy with Ansible inventory)
@@ -21,14 +22,14 @@ CONDITIONS
 
 STEPS
 
-1) Install Ansible on control node and Ansible Docker module (community.docker) -> ansible-galaxy install community.docker
-2) Update and upgrade system packages (apt upgade + update)
-3) Setup system and security
-  3a) Set timezone to Europe/Paris
-  3b) Setup firewall
-  3c) Disable root SSH auth + only allow key authentification for other user
+2) Setup system and security (role: initial_server_setup)
+  2a) Set timezone to Europe/Paris
+  2b) Update and upgrade system packages (apt update + upgrade)
+  2c) Setup firewall (install ufw and configure it)
+  2d) Disable root SSH auth + only allow ssh key authentification
 4) Setup user
   4a) Add sudo-user
+  4b) Add SSH keys for this user
 5) Install Docker
 6) Push Dockerfiles to server
   6a) Push Wordpress Dockerfile
@@ -36,3 +37,8 @@ STEPS
   6c) Push MySQL Dockerfile
 7)
  ) Create wordpress site
+
+8) Reload SSH server to renew config
+
+Separate Docker container roles ?
+Make SSL for wordpress work 

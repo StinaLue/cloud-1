@@ -1,1 +1,5 @@
 FROM phpmyadmin
+# htpasswd must be generated with htpasswd -c .htpasswd USERNAME
+RUN mkdir /etc/httpd
+RUN echo '{{ PMA_htpasswd }}' > /etc/httpd/.htpasswd
+COPY phpmyadmin/apache-security.conf /etc/apache2/conf-enabled/apache-security.conf
