@@ -1,0 +1,27 @@
+---
+#- name: Create project directory on host
+#  file: 
+#    path: "{{ project_folder }}"
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: 0700
+
+- name: Create project directories on host
+  file: 
+    path: "{{ project_folder }}/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  loop: 
+    - wordpress
+    - mariadb
+    - phpmyadmin
+    - certbot
+
+- name: Copy project Docker-Compose file to remote host
+  template:
+    mode: 0700
+    src: docker-compose.yml.j2 
+    dest: "{{ project_folder }}/docker-compose.yml"

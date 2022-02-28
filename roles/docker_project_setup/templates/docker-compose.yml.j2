@@ -8,15 +8,15 @@ services:
     ports:
       - 80:80
     environment:
-      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_HOST: mariadb
       WORDPRESS_DB_USER: "{{ db_user }}"
       WORDPRESS_DB_PASSWORD: "{{ db_pass }}"
       WORDPRESS_DB_NAME: wordpressdb
     volumes:
-      #- wordpress:/var/www/html
-      - ./html:/var/www/html
+      - wordpress:/var/www/html
+      #- ./html:/var/www/html
 
-  db:
+  mariadb:
     build: ./mariadb
     restart: always
     environment:
@@ -25,8 +25,8 @@ services:
       MARIADB_PASSWORD: "{{ db_pass }}"
       MARIADB_ROOT_PASSWORD: '1'
     volumes:
-      #- db:/var/lib/mysql
-      - ./mysql:/var/lib/mysql
+      - mariadb:/var/lib/mysql
+      #- ./mysql:/var/lib/mysql
   
   phpmyadmin:
     build: ./phpmyadmin
@@ -34,7 +34,10 @@ services:
     ports:
       - 8080:80
 
+  certbot:
+    build: ./certbot
+
 volumes:
   wordpress:
-  db:
+  mariadb:
   phpmyadmin:

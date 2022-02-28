@@ -1,0 +1,28 @@
+---
+#- name: Create PHPMyAdmin project directory on host
+#  file: 
+#    path: "{{ project_folder }}/phpmyadmin"
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: 0700
+
+- name: Copy PHPMyAdmin Dockerfile file to host
+  template:
+    mode: 0700
+    src: phpmyadmin.Dockerfile.j2
+    dest: "{{ project_folder }}/phpmyadmin/Dockerfile"
+
+- name: Copy preconfiguration files for PHPMyAdmin
+  copy:
+    mode: 0700
+    src: phpmyadmin
+    dest: "{{ project_folder }}/phpmyadmin/" 
+
+- name: Launch PHPMyAdmin service through docker-compose
+  docker_compose:
+    build: yes
+    project_src: "{{ project_folder }}" 
+    services:
+      - phpmyadmin
+  tags: [ 'phpmyadmin' ]

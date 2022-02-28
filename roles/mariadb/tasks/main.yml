@@ -1,0 +1,28 @@
+---
+#- name: Create MariaDB project directory on host
+#  file: 
+#    path: "{{ project_folder }}/mariadb"
+#    state: directory
+#    owner: root
+#    group: root
+#    mode: 0700
+
+- name: Copy MariaDB Dockerfile file to host
+  template:
+    mode: 0700
+    src: mariadb.Dockerfile.j2
+    dest: "{{ project_folder }}/mariadb/Dockerfile"
+
+- name: Copy preconfiguration files for MariaDB
+  copy:
+    mode: 0744
+    src: .
+    dest: "{{ project_folder }}/mariadb/" 
+    
+- name: Launch MariaDB service through docker-compose
+  docker_compose:
+    build: yes
+    project_src: "{{ project_folder }}" 
+    services:
+      - mariadb
+  tags: [ 'mariadb' ]

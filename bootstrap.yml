@@ -1,8 +1,0 @@
----
-- hosts: all
-  roles:
-  - initial_server_setup
-  - docker-install
-  - docker_containers
-  - hostnames
-  - users
