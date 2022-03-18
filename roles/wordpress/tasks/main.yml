@@ -13,9 +13,15 @@
     src: wordpress.Dockerfile.j2
     dest: "{{ project_folder }}/wordpress/Dockerfile"
 
-- name: Copy preconfiguration files for Wordpress
-  copy:
+- name: Copy dynamic preconfiguration files for Wordpress
+  template:
     mode: 0700
+    src: default-ssl.conf.j2
+    dest: "{{ project_folder }}/wordpress/default-ssl.conf"
+
+- name: Copy static preconfiguration files for Wordpress
+  copy:
+    mode: 0744
     src: .
     dest: "{{ project_folder }}/wordpress/" 
 

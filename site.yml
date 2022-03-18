@@ -4,9 +4,9 @@
   - initial_server_setup
   - docker_install
   - docker_project_setup
+  - mariadb
   - wordpress
   - phpmyadmin
-  - mariadb
   - certbot
   - hostnames
   - users

@@ -13,11 +13,11 @@
     src: certbot.Dockerfile.j2
     dest: "{{ project_folder }}/certbot/Dockerfile"
 
-- name: Copy preconfiguration files for Certbot
-  copy:
-    mode: 0700
-    src: .
-    dest: "{{ project_folder }}/certbot/" 
+#- name: Copy preconfiguration files for Certbot
+#  copy:
+#    mode: 0700
+#    src: .
+#    dest: "{{ project_folder }}/certbot/certs/live/{{ domain_name }}" 
 
 - name: Launch Cerbot service through docker-compose
   docker_compose:
@@ -26,3 +26,9 @@
     services:
       - certbot
   tags: [ 'certbot' ]
+
+- name: Create cron job to try to renew HTTPS certificate daily
+  cron:
+    name: "Try to renew HTTPS certificate"
+    special_time: daily
+    job: "docker-compose -f $(find / -wholename */{{ project_folder }}/docker-compose.yml 2>/dev/null) run --rm certbot renew"

@@ -1,2 +1,4 @@
 ---
 project_folder: cloud-1
+#domain_name: toastytasty.duckdns.org
+domain_name: 192.168.1.31

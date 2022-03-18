@@ -13,10 +13,16 @@
     src: phpmyadmin.Dockerfile.j2
     dest: "{{ project_folder }}/phpmyadmin/Dockerfile"
 
+- name: Copy dynamic preconfiguration files for PHPMyAdmin
+  template:
+    mode: 0700
+    src: default-ssl.conf.j2
+    dest: "{{ project_folder }}/phpmyadmin/default-ssl.conf"
+
 - name: Copy preconfiguration files for PHPMyAdmin
   copy:
     mode: 0700
-    src: phpmyadmin
+    src: .
     dest: "{{ project_folder }}/phpmyadmin/" 
 
 - name: Launch PHPMyAdmin service through docker-compose
