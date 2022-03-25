@@ -14,13 +14,13 @@ services:
       WORDPRESS_DB_PASSWORD: "{{ db_pass }}"
       WORDPRESS_DB_NAME: wordpressdb
     volumes:
-      - wordpress:/var/www/html
-      - ./wordpress/uploads:/var/www/html/wp-content/uploads
-      - ./certbot/certs:/etc/ssl/certs:ro
-      - ./certbot/www:/var/www/certbot:ro
-      #- ./wordpress/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
-      #- ./wordpress/alias.conf:/etc/apache2/mods-enabled/alias.conf:ro
-      #- ./wordpress/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro
+      - wordpress:/var/www/html # named volume for site content persistence
+      - ./wordpress/uploads:/var/www/html/wp-content/uploads # custom uploads
+      - ./certbot/certs:/etc/ssl/certs:ro # HTTPS cert folder
+      - ./certbot/www:/var/www/certbot:ro # Certbot specific site folder (to retrieve certificate)
+      - ./wordpress/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro # Apache config file for HTTPS
+      - ./wordpress/alias.conf:/etc/apache2/mods-enabled/alias.conf:ro # Apache config file for Certbot specific actions
+      - ./wordpress/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh:ro # Startup script to enable HTTPS
 
   mariadb:
     build: ./mariadb
@@ -29,10 +29,9 @@ services:
       MARIADB_DATABASE: wordpressdb
       MARIADB_USER: "{{ db_user }}"
       MARIADB_PASSWORD: "{{ db_pass }}"
-      MARIADB_ROOT_PASSWORD: '1'
+      MARIADB_ROOT_PASSWORD: "{{ db_root_pass }}"
     volumes:
-      - mariadb:/var/lib/mysql
-      #- ./mysql:/var/lib/mysql
+      - mariadb:/var/lib/mysql # named volume for DB persistence
   
   phpmyadmin:
     build: ./phpmyadmin
@@ -42,18 +41,18 @@ services:
     ports:
       - 8080:443
     volumes:
-      - ./certbot/certs:/etc/ssl/certs:ro
-      #- ./phpmyadmin/docker-entrypoint.sh:/docker-entrypoint.sh:ro
-      #- ./phpmyadmin/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro
+      - ./certbot/certs:/etc/ssl/certs:ro # HTTPS cert folder
+      - ./phpmyadmin/docker-entrypoint.sh:/docker-entrypoint.sh:ro # Startup script to enable HTTPS
+      - ./phpmyadmin/default-ssl.conf:/etc/apache2/sites-available/default-ssl.conf:ro # Apache config file for HTTPS
 
   certbot:
     build: ./certbot
     volumes:
-      - ./certbot/certs:/etc/letsencrypt/:rw
-      - ./certbot/www:/var/www/certbot:rw
-    command: "certonly --non-interactive --webroot --webroot-path=/var/www/certbot -d {{ domain_name }} --agree-tos -m julientourne28@gmail.com" #--dry-run --force-renewal"
+      - ./certbot/certs:/etc/letsencrypt/:rw # HTTPS cert folder (populated by certbot)
+      - ./certbot/www:/var/www/certbot:rw # Certbot specific site folder (necessary to retrieve certificate)
+    # The following command tries to fetch a new certificate for the domain, and put it in the HTTPS cert folder
+    command: "certonly --non-interactive --webroot --webroot-path=/var/www/certbot -d {{ domain_name }} --agree-tos -m {{ certbot_mail }}" #--dry-run --force-renewal"
 
 volumes:
   wordpress:
   mariadb:
-  phpmyadmin:

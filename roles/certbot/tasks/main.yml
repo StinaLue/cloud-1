@@ -1,23 +1,9 @@
 ---
-#- name: Create Certbot (Let's Encrypt) project directory on host
-#  file: 
-#    path: "{{ project_folder }}/certbot"
-#    state: directory
-#    owner: root
-#    group: root
-#    mode: 0700
-
 - name: Copy Certbot Dockerfile file to host
   template:
     mode: 0700
     src: certbot.Dockerfile.j2
     dest: "{{ project_folder }}/certbot/Dockerfile"
-
-#- name: Copy preconfiguration files for Certbot
-#  copy:
-#    mode: 0700
-#    src: .
-#    dest: "{{ project_folder }}/certbot/certs/live/{{ domain_name }}" 
 
 - name: Launch Cerbot service through docker-compose
   docker_compose:

@@ -1,0 +1,3 @@
+---
+user_name: "{{ vault_user_name }}"
+user_pass: "{{ vault_user_pass }}"

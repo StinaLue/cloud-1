@@ -1,12 +1,4 @@
 ---
-#- name: Create MariaDB project directory on host
-#  file: 
-#    path: "{{ project_folder }}/mariadb"
-#    state: directory
-#    owner: root
-#    group: root
-#    mode: 0700
-
 - name: Copy MariaDB Dockerfile file to host
   template:
     mode: 0700
@@ -19,12 +11,6 @@
     src: wordpressdb.sql.j2
     dest: "{{ project_folder }}/mariadb/wordpressdb.sql"
 
-#- name: Copy preconfiguration files for MariaDB
-#  copy:
-#    mode: 0744
-#    src: .
-#    dest: "{{ project_folder }}/mariadb/" 
-    
 - name: Launch MariaDB service through docker-compose
   docker_compose:
     build: yes

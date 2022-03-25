@@ -1,5 +1,5 @@
 PRE-REQUISITES
-1. Server up and running (Ubuntu 20.04)
+1. Server up and running (Ubuntu 20.04), reachable over the internet
 2. SSH daemon installed
 3. Python3 installed
 4. SSH-Keys configured for remote administration (root user)
@@ -22,23 +22,28 @@ CONDITIONS
 
 STEPS
 
-2) Setup system and security (role: initial_server_setup)
-  2a) Set timezone to Europe/Paris
-  2b) Update and upgrade system packages (apt update + upgrade)
-  2c) Setup firewall (install ufw and configure it)
-  2d) Disable root SSH auth + only allow ssh key authentification
-4) Setup user
-  4a) Add sudo-user
-  4b) Add SSH keys for this user
-5) Install Docker
-6) Push Dockerfiles to server
-  6a) Push Wordpress Dockerfile
-  6b) Push PhpMyAdmin Dockerfile
-  6c) Push MySQL Dockerfile
-7)
- ) Create wordpress site
-
-8) Reload SSH server to renew config
-
-Separate Docker container roles ?
-Make SSL for wordpress work 
+1) Setup system and security (ROLE: initial_server_setup)
+  1a) Set timezone to Europe/Paris
+  1b) Update and upgrade system packages (apt update + upgrade)
+  1c) Setup firewall (install ufw and configure it)
+  1d) Disable root SSH auth + only allow ssh key authentification + plan SSH service restart
+2) Setup user (ROLE: users)
+  2a) Add sudo-user
+  2b) Add SSH keys for this user
+3) Install Docker (ROLE: docker_install)
+4) Setup project files (ROLE: docker_project_setup)
+  4a) Create services folders
+  4b) Copy docker-compose file
+5) Setup Mariadb (ROLE: mariadb)
+  5a) Copy Dockerfile and Mariadb config files
+  5b) Launch Mariadb through docker-compose
+6) Setup Wordpress (ROLE: wordpress)
+  6a) Copy Dockerfile and Wordpress config files
+  6b) Launch Wordpress through docker-compose
+7) Setup PhpMyAdmin (ROLE: phpmyadmin)
+  7a) Copy Dockerfile and PhpMyAdmin config files
+  7b) Launch PhpMyAdmin through docker-compose
+8) Setup Certbot (ROLE: certbot)
+  8a) Copy Dockerfile
+  8b) Launch Certbot through docker-compose
+  8c) Create job to periodically try to recreate certificate

@@ -1,12 +1,4 @@
 ---
-#- name: Create Wordpress project directory on host
-#  file: 
-#    path: "{{ project_folder }}/wordpress"
-#    state: directory
-#    owner: root
-#    group: root
-#    mode: 0700
-
 - name: Copy Wordpress Dockerfile file to host
   template:
     mode: 0700

@@ -2,11 +2,10 @@
 - hosts: all
   roles:
   - initial_server_setup
+  - users
   - docker_install
   - docker_project_setup
   - mariadb
   - wordpress
   - phpmyadmin
   - certbot
-  - hostnames
-  - users

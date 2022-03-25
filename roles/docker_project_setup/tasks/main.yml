@@ -1,12 +1,4 @@
 ---
-#- name: Create project directory on host
-#  file: 
-#    path: "{{ project_folder }}"
-#    state: directory
-#    owner: root
-#    group: root
-#    mode: 0700
-
 - name: Create project directories on host
   file: 
     path: "{{ project_folder }}/{{ item }}"

@@ -1,8 +1,8 @@
 ---
-db_pass: "{{ vault_db_pass }}"
-
 db_user: "{{ vault_db_user }}"
-
-user_pass: "{{ vault_user_pass }}"
+db_pass: "{{ vault_db_pass }}"
+db_root_pass: "{{ vault_db_rootpass }}"
 
 PMA_htpasswd: "{{ vault_PMA_htpasswd }}"
+
+certbot_mail: "{{ vault_certbot_mail }}"

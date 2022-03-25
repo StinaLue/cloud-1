@@ -3,29 +3,25 @@
   apt: 
     name: sudo
 
-- name: Create stins user with passwort thanks to vault and password_hash functionality 
+- name: Create sudo user with password thanks to vault and password_hash functionality 
   user:
-    name: stins
+    name: "{{ user_name }}"
     shell: /bin/bash
-    uid: 1001
-    group: users
     groups: sudo
     append: true # --> user is not removed from any other group
     password: "{{ vault_user_pass  | password_hash('sha512') }}"
 
-- name: Create stins's .ssh directory
+- name: Create user's .ssh directory
   file:
-    path: /stins/.ssh
+    path: "/home/{{ user_name }}/.ssh"
     state: directory
-    owner: stins
-    group: users
+    owner: "{{ user_name }}"
     mode: 0700
 
-- name: Copy stins's authorized keys
+- name: Copy user's authorized keys to be the same as the root user
   copy:
-    src: authorized_keys_stins
-    dest: /stins/.ssh/authorized_keys
-    owner: stins
-    group: users
+    src: /root/.ssh/authorized_keys
+    dest: "/home/{{ user_name }}/.ssh/authorized_keys"
+    owner: "{{ user_name }}"
+    remote_src: yes
     mode: 0600
-
